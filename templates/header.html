@@ -1,0 +1,67 @@
+<!-- templates/header.html -->
+<header>
+  <div class="container header-container">
+    <!-- templates/header.html -->
+    <a href="/" class="logo">
+      <img
+        src="{{ request.url_for('static', path='images/logo.png') }}"
+        alt="ManoSay Logo"
+        class="logo-img"
+        onerror="this.onerror=null;this.src='https://via.placeholder.com/120x40?text=ManoSay';"
+      />
+      <span class="logo-text">Mano<span>Say</span></span>
+    </a>
+
+    <div class="mobile-toggle" id="mobile-toggle">
+      <i class="fas fa-bars"></i>
+    </div>
+
+    <ul class="nav-menu" id="nav-menu">
+      <li>
+        <a href="/" class="{% if active_page == 'home' %}active{% endif %}"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          href="/#features-section"
+          class="{% if active_page == 'home' %}active{% endif %}"
+          >Features</a
+        >
+      </li>
+      <li>
+        <a
+          href="/#services-section"
+          class="{% if active_page == 'home' %}active{% endif %}"
+          >Services</a
+        >
+      </li>
+      <li>
+        <a
+          href="/#projects-section"
+          class="{% if active_page == 'home' %}active{% endif %}"
+          >Projects</a
+        >
+      </li>
+      <li>
+        <a href="/blog" class="{% if active_page == 'blog' %}active{% endif %}"
+          >Blog</a
+        >
+      </li>
+      <li>
+        <a
+          href="/#about-section"
+          class="{% if active_page == 'home' %}active{% endif %}"
+          >About</a
+        >
+      </li>
+      <li>
+        <a
+          href="/#contact-section"
+          class="{% if active_page == 'home' %}active{% endif %}"
+          >Contact</a
+        >
+      </li>
+    </ul>
+  </div>
+</header>

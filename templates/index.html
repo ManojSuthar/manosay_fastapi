@@ -1,0 +1,440 @@
+<!-- templates/index.html -->
+{% extends "base.html" %} {% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title">Build Beautiful Mobile Apps with Modern Tools</h1>
+      <p class="hero-desc">
+        Create stunning, responsive websites that captivate your audience and
+        deliver exceptional user experiences across all devices.
+      </p>
+      <div class="hero-buttons">
+        <a href="#" class="btn">Get Started</a>
+        <a href="#contact-section" class="btn btn-accent">Contact Us</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img
+        src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+        alt="Web Development"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features-section" class="section">
+  <div class="container">
+    <h2 class="section-title">Our Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <h3 class="feature-title">Fast Performance</h3>
+        <p>
+          Optimized for speed and performance to ensure your website loads
+          quickly and provides smooth interactions.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3 class="feature-title">Fully Responsive</h3>
+        <p>
+          Looks great on any device - desktop, tablet, or mobile. Your website
+          will adapt seamlessly to all screen sizes.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h3 class="feature-title">Secure & Safe</h3>
+        <p>
+          Built with security in mind to protect your data and keep your website
+          safe from potential threats.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services-section" class="section services">
+  <div class="container">
+    <h2 class="section-title">Our Services</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fab fa-android"></i>
+        </div>
+        <h3 class="service-title">Android Development</h3>
+        <p>Custom Android applications tailored to your business needs.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fab fa-apple"></i>
+        </div>
+        <h3 class="service-title">iOS Development</h3>
+        <p>High-performance and scalable iOS apps for iPhone and iPad.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-tablet-alt"></i>
+        </div>
+        <h3 class="service-title">Flutter (Mobile & Tablet)</h3>
+        <p>
+          Cross-platform apps using Flutter, optimized for both mobile and
+          tablets.
+        </p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h3 class="service-title">E-commerce Solutions</h3>
+        <p>
+          Complete online store development with secure payment processing,
+          inventory management, and marketing tools.
+        </p>
+        <a href="#" class="service-link"
+          >Learn More <i class="fas fa-arrow-right"></i
+        ></a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <h3 class="service-title">SEO Optimization</h3>
+        <p>
+          Improve your website's visibility in search engines with our
+          comprehensive SEO strategies and techniques.
+        </p>
+        <a href="#" class="service-link"
+          >Learn More <i class="fas fa-arrow-right"></i
+        ></a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3 class="service-title">Digital Marketing</h3>
+        <p>
+          Reach your target audience and grow your business with our data-driven
+          digital marketing campaigns.
+        </p>
+        <a href="#" class="service-link"
+          >Learn More <i class="fas fa-arrow-right"></i
+        ></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects-section" class="section projects">
+  <div class="container">
+    <h2 class="section-title">Our Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <!--<div class="project-image">
+          <img
+            src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+            alt="DailyNews24"
+          />
+        </div>-->
+        <div class="project-content">
+          <h3 class="project-title">DailyNews24</h3>
+          <p class="project-desc">
+            The DailyNews24 app is a comprehensive and user-friendly news
+            platform that delivers fast and accurate updates across a wide range
+            of categories — including national and international news,
+            entertainment, politics, sports, business, lifestyle, and more.
+          </p>
+          <a
+            href="https://apps.apple.com/in/app/dailynews24/id6744032665"
+            target="_blank"
+            class="project-link"
+            >View Project <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <!--<div class="project-image">
+          <img
+            src="https://images.unsplash.com/photo-1563014959-7aaa83350992?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+            alt="YLogLite"
+          />
+        </div>-->
+        <div class="project-content">
+          <h3 class="project-title">YLogLite</h3>
+          <p class="project-desc">
+            Real-time tracking with BLE, designed for seamless communication and
+            vehicle tracking.
+          </p>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.yloglite.activity&hl=en-I"
+            target="_blank"
+            class="project-link"
+            >View Project <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <!--<div class="project-image">
+          <img
+            src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+            alt="YLogForms"
+          />
+        </div>-->
+        <div class="project-content">
+          <h3 class="project-title">YLogForms</h3>
+          <p class="project-desc">
+            Innovative solution for feeding routine data in an electronic form
+            with ease.
+          </p>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.yusata.ylogforms&hl=en-IN"
+            target="_blank"
+            class="project-link"
+            >View Project <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <!--<div class="project-image">
+          <img
+            src="https://images.unsplash.com/photo-1616007736933-54d2525a2c19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+            alt="YLog365"
+          />
+        </div>-->
+        <div class="project-content">
+          <h3 class="project-title">YLog365</h3>
+          <p class="project-desc">
+            Smart functions for real-time tracking with easy-to-use tracking
+            interface.
+          </p>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.app.ylog365&hl=en-IN"
+            target="_blank"
+            class="project-link"
+            >View Project <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <!--<div class="project-image">
+          <img
+            src="https://images.unsplash.com/photo-1607083206968-13611e3d76db?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+            alt="ShootCx"
+          />
+        </div>-->
+        <div class="project-content">
+          <h3 class="project-title">ShootCx</h3>
+          <p class="project-desc">
+            SHOOT helps you with an affordable, quick and convenient Party
+            Store, Grocery, Liquor, Lunch, Dinner and many more deliveries.
+          </p>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.SHOOTCxnew.customer"
+            target="_blank"
+            class="project-link"
+            >View Project <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <!--<div class="project-image">
+          <img
+            src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+            alt="MiniManager"
+          />
+        </div>-->
+        <div class="project-content">
+          <h3 class="project-title">MiniManager</h3>
+          <p class="project-desc">
+            App for PVS deliveries management, simplifying logistics and
+            delivery tracking.
+          </p>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.minimanager&hl=en"
+            target="_blank"
+            class="project-link"
+            >View Project <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <!--<div class="project-image">
+          <img
+            src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+            alt="Clinic Seeker"
+          />
+        </div>-->
+        <div class="project-content">
+          <h3 class="project-title">Clinic Seeker</h3>
+          <p class="project-desc">
+            Helps you find healthcare facilities near you in Canada, with
+            real-time waiting times.
+          </p>
+          <a
+            href="https://apkpure.com/clinic-seeker-is-no-longer-available-july-2019/dynaweb.clinicseeker"
+            target="_blank"
+            class="project-link"
+            >View Project <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about-section" class="section about">
+  <div class="container">
+    <h2 class="section-title">About Us</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <h3>We Create Digital Solutions That Drive Success</h3>
+        <p>
+          ManoSay is a leading web development company dedicated to creating
+          innovative digital solutions that help businesses thrive in the
+          digital age. With years of experience and a team of skilled
+          professionals, we deliver exceptional results that exceed our clients'
+          expectations.
+        </p>
+
+        <div class="about-features">
+          <div class="about-feature">
+            <i class="fas fa-users"></i>
+            <div>
+              <h4>Expert Team</h4>
+              <p>
+                Our team consists of experienced developers, designers, and
+                digital strategists.
+              </p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <i class="fas fa-lightbulb"></i>
+            <div>
+              <h4>Innovative Solutions</h4>
+              <p>
+                We stay ahead of industry trends to deliver cutting-edge
+                solutions.
+              </p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <i class="fas fa-handshake"></i>
+            <div>
+              <h4>Client-Centric Approach</h4>
+              <p>
+                Your success is our priority. We work closely with you to
+                achieve your goals.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <a href="#contact-section" class="btn" style="margin-top: 30px"
+          >Get In Touch</a
+        >
+      </div>
+      <div class="about-image">
+        <img
+          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+          alt="Our Team"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact-section" class="section contact">
+  <div class="container">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-content">
+      <div class="contact-info">
+        <h3>Get In Touch</h3>
+        <p>
+          Have a project in mind or want to learn more about our services? Reach
+          out to us and our team will get back to you as soon as possible.
+        </p>
+
+        <div class="contact-details">
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h4>Address</h4>
+              <p>Phase-7, Mohali, India - 160055</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <h4>Phone</h4>
+              <p>+91-6367219071</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h4>Email</h4>
+              <p>manojmottyar@gmail.com</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <form id="contactForm">
+          <div class="form-group">
+            <input type="text" id="name" placeholder="Your Name" required />
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" placeholder="Your Email" required />
+          </div>
+          <div class="form-group">
+            <input type="text" id="subject" placeholder="Subject" required />
+          </div>
+          <div class="form-group">
+            <textarea
+              id="message"
+              rows="5"
+              placeholder="Your Message"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

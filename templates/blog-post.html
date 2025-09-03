@@ -1,0 +1,46 @@
+{% extends "base.html" %} {% block content %}
+<!-- Blog Post Header -->
+<section class="section blog-post-header">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="/">Home</a> / <a href="/blog">Blog</a> /
+      <span>{{ post.title }}</span>
+    </nav>
+    <h1 class="post-title-large">{{ post.title }}</h1>
+    <div class="post-meta-large">
+      <span class="post-date"
+        ><i class="far fa-calendar"></i> {{ post.published_date }}</span
+      >
+      <span class="post-author"
+        ><i class="far fa-user"></i> {{ post.author }}</span
+      >
+    </div>
+  </div>
+</section>
+
+<!-- Blog Post Content -->
+<section class="section blog-post-content">
+  <div class="container">
+    <div class="post-content-wrapper">
+      <div class="post-image-large">
+        <img src="{{ post.image }}" alt="{{ post.title }}" />
+      </div>
+
+      <div class="post-content-text">{{ post.content | safe }}</div>
+
+      <div class="post-tags-large">
+        <h3>Tags:</h3>
+        {% for tag in post.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="post-navigation">
+        <a href="/blog" class="btn btn-outline"
+          ><i class="fas fa-arrow-left"></i> Back to Blog</a
+        >
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
