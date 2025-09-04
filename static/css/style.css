@@ -7,9 +7,9 @@
 }
 
 :root {
-    --primary: #4361ee;
+    --primary:#FD545D; /*#4361ee;*/
     --secondary: #3a0ca3;
-    --accent: #f72585;
+    --accent: #5081A1; /*#f72585;*/
     --light: #f8f9fa;
     --dark: #212529;
     --gray: #6c757d;
@@ -81,15 +81,7 @@ ul {
 
 /* Header Styles */
 header {
-    /* height: var(--header-height);
-    line-height: var(--header-height);
-    background-color: white; */
-    /* box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); */
-    /* position: fixed; */
     width: 100%;
-    /* top: 0;
-    z-index: 1000; */
-
     position: fixed;
     top: 0;
     left: 0;
@@ -114,13 +106,11 @@ header {
     display: flex;
     align-items: center;
     gap: 6px;
-    /* image और text के बीच spacing */
     text-decoration: none;
 }
 
 .logo-img {
     height: 40px;
-    /* अपनी जरूरत के हिसाब से size बदल सकते हो */
     width: auto;
 }
 
@@ -132,21 +122,7 @@ header {
 
 .logo-text span {
     color: var(--accent);
-    /* "Say" को highlight करने के लिए */
 }
-
-/* .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--primary);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.logo span {
-    color: var(--accent);
-} */
 
 .nav-menu {
     display: flex;
@@ -190,7 +166,7 @@ header {
 .hero-title {
     font-size: 3rem;
     margin-bottom: 20px;
-    color: var(--secondary);
+    color: var(--primary);
 }
 
 .hero-desc {
