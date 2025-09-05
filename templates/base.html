@@ -18,6 +18,42 @@
 
     <footer>{% include "footer.html" %}</footer>
 
+    <!-- WhatsApp Floating Button Start -->
+    <a
+      id="whatsapp-button"
+      href="https://wa.me/916367219071?text=Hi%20Manoj,%20I%20am%20interested%20in%20mobile%20app%20development"
+      target="_blank"
+    >
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <style>
+      #whatsapp-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        background-color: #25d366;
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      #whatsapp-button:hover {
+        transform: scale(1.1);
+      }
+      #whatsapp-button i {
+        font-size: 28px;
+      }
+    </style>
+    <!-- WhatsApp Floating Button End -->
+
     <script src="/static/js/script.js"></script>
   </body>
 </html>

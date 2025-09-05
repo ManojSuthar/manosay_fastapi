@@ -1,21 +1,49 @@
+# main.py
+import os
 import logging
-from fastapi import FastAPI, Request, HTTPException
+import asyncio
+from datetime import datetime
+from typing import List, Optional
+
+from dotenv import load_dotenv
+
+from fastapi import FastAPI, Request, HTTPException, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
+
 from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+
+# Email
 import aiosmtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import os
-from dotenv import load_dotenv
+
+# security / db utils
+import bcrypt
+from bson import ObjectId
+
+# Import db helpers (Motor async)
+from db import (
+    get_database,
+    connect_to_mongo,
+    close_mongo_connection,
+    ensure_indexes,
+    ping_db,
+)
+
+# Optional route modules (if present)
+# We'll include them below using try/except to keep app startup resilient.
+# from routes.auth import router as auth_router
+# from routes.admin import router as admin
 
 # Load environment variables
 load_dotenv()
 
-app = FastAPI()
+# App & logging
+app = FastAPI(title="ManoSay")
+logger = logging.getLogger(__name__)
 
 # Configure CORS
 app.add_middleware(
@@ -32,9 +60,70 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Templates folder
 templates = Jinja2Templates(directory="templates")
 
-# Pydantic model for contact form
+# Include routers if they exist
+try:
+    from routes import auth
+    app.include_router(auth.router)
+except ImportError:
+    logger.info("Auth routes not found")
+
+try:
+    from routes.admin_web import router as admin_web_router
+    app.include_router(admin_web_router)
+except ImportError:
+    logger.info("admin_web routes not found")
+
+try:
+    from routes import admin as admin_routes
+    app.include_router(admin_routes.router)
+except ImportError:
+    logger.info("Admin routes not found")
+
+try:
+    from routes import blog
+    app.include_router(blog.router)
+except ImportError:
+    logger.info("Blog routes not found")
+
+try:
+    from routes import leads
+    app.include_router(leads.router)
+except ImportError:
+    logger.info("Leads routes not found")
+
+# ------------------------------------------------------------------------
+# Startup / Shutdown - MongoDB integration (Motor)
+# ------------------------------------------------------------------------
 
 
+@app.on_event("startup")
+async def startup_event():
+    # Initialize Motor client and database
+    try:
+        await connect_to_mongo()
+    except Exception:
+        logger.exception("Failed to connect to MongoDB during startup")
+        # Optionally: raise to prevent app from starting if DB mandatory
+        # raise
+
+    # Ensure indexes (optional, idempotent). Errors shouldn't stop startup.
+    try:
+        await ensure_indexes()
+    except Exception:
+        logger.exception("ensure_indexes() failed during startup")
+
+
+@app.on_event("shutdown")
+def shutdown_event():
+    try:
+        close_mongo_connection()
+    except Exception:
+        logger.exception("Error while closing MongoDB connection on shutdown")
+
+
+# ------------------------------------------------------------------------
+# Pydantic models & configuration
+# ------------------------------------------------------------------------
 class ContactForm(BaseModel):
     name: str
     email: EmailStr
@@ -42,7 +131,6 @@ class ContactForm(BaseModel):
     message: str
 
 
-# Email configuration
 SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
 SMTP_USERNAME = os.getenv("SMTP_USERNAME")
@@ -50,17 +138,9 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL", "manojmottyar@gmail.com")
 
 
-load_dotenv()
-
-SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
-SMTP_USERNAME = os.getenv("SMTP_USERNAME")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
-RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL", "manojmottyar@gmail.com")
-
-logger = logging.getLogger(__name__)
-
-# Sample blog data
+# ------------------------------------------------------------------------
+# Sample blog data (unchanged)
+# ------------------------------------------------------------------------
 BLOG_POSTS = [
     {
         "id": 1,
@@ -141,8 +221,12 @@ BLOG_POSTS = [
     }
 ]
 
+# ------------------------------------------------------------------------
+# Email sending helper
+# ------------------------------------------------------------------------
 
-async def send_contact_email(form_data):
+
+async def send_contact_email(form_data: ContactForm):
     """Send email from contact form (standalone function)."""
     try:
         msg = MIMEMultipart()
@@ -179,8 +263,11 @@ async def send_contact_email(form_data):
         # re-raise so FastAPI returns 500 with message
         raise
 
+# ------------------------------------------------------------------------
+# Routes (views + api)
+# ------------------------------------------------------------------------
 
-# Home route
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     projects = [
@@ -254,81 +341,92 @@ async def home(request: Request):
             {"title": "Cloud Hosting", "icon": "cloud",
                 "desc": "Reliable, scalable cloud hosting"}
         ],
-        "recent_posts": BLOG_POSTS[:3],  # Show 3 recent posts on homepage
+        "recent_posts": BLOG_POSTS[:3],
         "page_title": "Home - Manosay",
         "active_page": "home"
-    }
-
-    # Pass all necessary data to template
-    context = {
-        "request": request,
-        "projects": projects,
-        "features": [
-            {"title": "Fast Performance", "icon": "rocket",
-                "desc": "Optimized for speed and performance"},
-            {"title": "Fully Responsive", "icon": "mobile-alt",
-                "desc": "Looks great on any device"},
-            {"title": "Secure & Safe", "icon": "lock",
-                "desc": "Built with security in mind"}
-        ],
-        "services": [
-            {"title": "Web Design", "icon": "paint-brush",
-                "desc": "Beautiful, modern website designs"},
-            {"title": "Web Development", "icon": "code",
-                "desc": "Custom web development solutions"},
-            {"title": "E-commerce Solutions", "icon": "shopping-cart",
-                "desc": "Complete online store development"},
-            {"title": "SEO Optimization", "icon": "search",
-                "desc": "Improve your website's visibility"},
-            {"title": "Digital Marketing", "icon": "chart-line",
-                "desc": "Data-driven marketing campaigns"},
-            {"title": "Cloud Hosting", "icon": "cloud",
-                "desc": "Reliable, scalable cloud hosting"}
-        ]
     }
 
     return templates.TemplateResponse("index.html", context)
 
 
-# Blog page - List all posts
-@app.get("/blog", response_class=HTMLResponse)
-async def blog_list(request: Request):
-    context = {
-        "request": request,
-        "posts": BLOG_POSTS,
-        "page_title": "Blog - Manosay",
-        "active_page": "blog"
-    }
-    return templates.TemplateResponse("blog.html", context)
+# # Blog list
+# @app.get("/blog", response_class=HTMLResponse)
+# async def blog_list(request: Request):
+#     context = {
+#         "request": request,
+#         "posts": BLOG_POSTS,
+#         "page_title": "Blog - Manosay",
+#         "active_page": "blog"
+#     }
+#     return templates.TemplateResponse("blog.html", context)
 
 
-# Individual blog post
+# # Single blog post
 # @app.get("/blog/{slug}", response_class=HTMLResponse)
 # async def blog_post(request: Request, slug: str):
 #     post = next((p for p in BLOG_POSTS if p["slug"] == slug), None)
 #     if not post:
 #         return RedirectResponse("/blog")
-
-#     context = {
-#         "request": request,
-#         "post": post,
-#         "page_title": f"{post['title']} - Manosay Blog"
-#     }
+#     context = {"request": request, "post": post,
+#                "page_title": f"{post['title']} - Manosay", "active_page": "blog"}
 #     return templates.TemplateResponse("blog-post.html", context)
 
+
+# Blog list - load from DB
+@app.get("/blog", response_class=HTMLResponse)
+async def blog_list(request: Request):
+    db = get_database()
+    posts_coll = db["posts"]
+    cursor = posts_coll.find({"status": "published"}
+                             ).sort("published_date", -1)
+    posts = []
+    async for doc in cursor:
+        # convert _id and datetime for templates
+        doc["_id"] = str(doc["_id"])
+        pd = doc.get("published_date")
+        if pd is not None:
+            try:
+                # Motor returns datetime objects already; convert to ISO for template display
+                doc["published_date"] = pd.isoformat()
+            except Exception:
+                pass
+        # ensure required fields exist to avoid template errors
+        doc.setdefault("excerpt", "")
+        doc.setdefault("author", "")
+        doc.setdefault("image", "")
+        doc.setdefault("tags", [])
+        posts.append(doc)
+
+    return templates.TemplateResponse("blog.html", {"request": request, "posts": posts, "page_title": "Blog - Manosay", "active_page": "blog"})
+
+
+# Single blog post - load from DB by slug
 @app.get("/blog/{slug}", response_class=HTMLResponse)
 async def blog_post(request: Request, slug: str):
-    post = next((p for p in BLOG_POSTS if p["slug"] == slug), None)
+    db = get_database()
+    post = await db["posts"].find_one({"slug": slug, "status": "published"})
     if not post:
-        from fastapi.responses import RedirectResponse
+        # if not found, redirect to blog list
         return RedirectResponse("/blog")
-    context = {"request": request, "post": post,
-               "page_title": f"{post['title']} - Manosay", "active_page": "blog"}
-    return templates.TemplateResponse("blog-post.html", context)
+    # normalize for template
+    post["_id"] = str(post["_id"])
+    pd = post.get("published_date")
+    if pd is not None:
+        try:
+            post["published_date"] = pd.isoformat()
+        except Exception:
+            pass
+    # Ensure fields exist
+    post.setdefault("content", "")
+    post.setdefault("excerpt", "")
+    post.setdefault("author", "")
+    post.setdefault("image", "")
+    post.setdefault("tags", [])
 
-# Privacy Policy page
+    return templates.TemplateResponse("blog-post.html", {"request": request, "post": post, "page_title": f"{post.get('title','Post')} - Manosay", "active_page": "blog"})
 
 
+# Privacy policy
 @app.get("/privacy-policy", response_class=HTMLResponse)
 async def privacy_policy(request: Request):
     context = {"request": request,
@@ -336,7 +434,129 @@ async def privacy_policy(request: Request):
     return templates.TemplateResponse("privacy-policy.html", context)
 
 
-# API endpoint for contact form
+# Ensure GET /admin/login exists and renders login page
+@app.get("/admin/login", response_class=HTMLResponse)
+async def admin_login_page(request: Request):
+    # If already logged in redirect to dashboard
+    if request.cookies.get("admin_user_id"):
+        return RedirectResponse(url="/admin/dashboard")
+    return templates.TemplateResponse("admin_login.html", {"request": request})
+
+
+# Admin login (POST) - async with Motor
+@app.post("/admin/login")
+async def admin_login_submit(request: Request, email: str = Form(...), password: str = Form(...)):
+    db = get_database()
+    users = db["users"]
+
+    # Motor find_one is async
+    user = await users.find_one({"email": email})
+    if not user:
+        return templates.TemplateResponse("admin_login.html", {"request": request, "error": "Invalid email or password"})
+
+    # Role check
+    if user.get("role", "").lower() != "admin":
+        return templates.TemplateResponse("admin_login.html", {"request": request, "error": "Not authorized"})
+
+    # Normalize stored password to bytes
+    stored = user.get("password")
+    stored_bytes = None
+    try:
+        from bson.binary import Binary as BsonBinary
+        if isinstance(stored, (bytes, bytearray)):
+            stored_bytes = bytes(stored)
+        elif isinstance(stored, str):
+            try:
+                stored_bytes = stored.encode("utf-8")
+            except Exception:
+                stored_bytes = stored
+        elif isinstance(stored, BsonBinary):
+            stored_bytes = bytes(stored)
+        else:
+            stored_bytes = bytes(stored)
+    except Exception as e:
+        print("Error normalizing stored password:", e)
+        stored_bytes = None
+
+    if not stored_bytes:
+        return templates.TemplateResponse("admin_login.html", {"request": request, "error": "Server error (pwd stored wrong)"})
+
+    # Check password
+    try:
+        ok = bcrypt.checkpw(password.encode("utf-8"), stored_bytes)
+    except Exception as e:
+        print("bcrypt error:", e)
+        ok = False
+
+    if not ok:
+        return templates.TemplateResponse("admin_login.html", {"request": request, "error": "Invalid email or password"})
+
+    # Success — set cookie and redirect
+    response = RedirectResponse(url="/admin/dashboard", status_code=302)
+    response.set_cookie(key="admin_user_id", value=str(
+        user.get("_id")), httponly=True, max_age=60*60*24, path="/")
+    return response
+
+
+# Admin dashboard - async with Motor
+# @app.get("/admin/dashboard")
+# async def admin_dashboard(request: Request):
+#     db = get_database()
+#     users = db["users"]
+
+#     admin_user_id = request.cookies.get("admin_user_id")
+#     if not admin_user_id:
+#         return RedirectResponse(url="/admin/login")
+
+#     try:
+#         user = await users.find_one({"_id": ObjectId(admin_user_id)})
+#     except Exception as e:
+#         print("Invalid admin_user_id cookie:", e)
+#         user = None
+
+#     if not user or user.get("role", "").lower() != "admin":
+#         return RedirectResponse(url="/admin/login")
+
+#     return templates.TemplateResponse("admin_dashboard.html", {"request": request, "user": {"email": user.get("email"), "name": user.get("name")}})
+
+
+@app.get("/admin/dashboard")
+async def admin_dashboard(request: Request):
+    db = get_database()
+    users = db["users"]
+
+    admin_user_id = request.cookies.get("admin_user_id")
+    if not admin_user_id:
+        return RedirectResponse(url="/admin/login")
+
+    try:
+        user = await users.find_one({"_id": ObjectId(admin_user_id)})
+    except Exception as e:
+        print("Invalid admin_user_id cookie:", e)
+        user = None
+
+    if not user or user.get("role", "").lower() != "admin":
+        return RedirectResponse(url="/admin/login")
+
+    # fetch recent posts by this admin (optional: fetch all posts)
+    posts_cursor = db["posts"].find(
+        {"author_id": ObjectId(admin_user_id)}).sort("published_date", -1)
+    posts = []
+    async for p in posts_cursor:
+        p["_id"] = str(p["_id"])
+        pd = p.get("published_date")
+        if isinstance(pd, datetime):
+            p["published_date"] = pd.isoformat()
+        posts.append(p)
+
+    return templates.TemplateResponse(
+        "admin_dashboard.html",
+        {"request": request, "user": {"email": user.get(
+            "email"), "name": user.get("name")}, "posts": posts}
+    )
+
+
+# Contact API
 @app.post("/api/contact")
 async def submit_contact_form(form_data: ContactForm):
     try:
@@ -351,18 +571,27 @@ async def submit_contact_form(form_data: ContactForm):
             }
         )
     except Exception as e:
+        logger.exception("Contact form send error")
         raise HTTPException(
             status_code=500,
             detail=f"Error sending message: {str(e)}"
         )
 
-# Health check endpoint
 
-
+# Health check (DB-aware)
 @app.get("/api/health")
 async def health_check():
-    return {"status": "healthy", "service": "Manosay API"}
+    db_ok = False
+    try:
+        db_ok = await ping_db()
+    except Exception:
+        db_ok = False
 
+    status = "healthy" if db_ok else "degraded"
+    return {"status": status, "service": "Manosay API", "db_connected": db_ok}
+
+
+# Run local server (for `python main.py`)
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,0 +1,88 @@
+{% extends "base.html" %} {% block content %}
+<section class="section">
+  <div class="container" style="max-width: 760px">
+    <h1 class="section-title">Request a Free Quote</h1>
+    <p style="text-align: center; color: var(--gray); margin-bottom: 20px">
+      Tell us about your app idea — we'll reply with a free estimate within 1
+      business day.
+    </p>
+
+    <div id="quote-status" style="display: none; margin-bottom: 12px"></div>
+
+    <form id="lead-form">
+      <div class="form-group">
+        <input
+          type="text"
+          id="lead-name"
+          name="name"
+          placeholder="Your name"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <input
+          type="email"
+          id="lead-email"
+          name="email"
+          placeholder="Email address"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <input
+          type="text"
+          id="lead-company"
+          name="company"
+          placeholder="Company (optional)"
+        />
+      </div>
+
+      <div class="form-group">
+        <select id="lead-platform" name="platform">
+          <option value="">Target platform (select)</option>
+          <option value="iOS">iOS</option>
+          <option value="Android">Android</option>
+          <option value="Both">Both</option>
+          <option value="Web">Web</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <select id="lead-budget" name="budget">
+          <option value="">Estimated budget (optional)</option>
+          <option value="&lt;50k">&lt; ₹50,000</option>
+          <option value="50k-2L">₹50,000 - ₹2,00,000</option>
+          <option value="2L-5L">₹2,00,000 - ₹5,00,000</option>
+          <option value="5L+">₹5,00,000+</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <input
+          type="text"
+          id="lead-timeline"
+          name="timeline"
+          placeholder="Desired timeline (weeks)"
+        />
+      </div>
+
+      <div class="form-group">
+        <textarea
+          id="lead-message"
+          name="message"
+          placeholder="Describe your idea briefly"
+          rows="6"
+        ></textarea>
+      </div>
+
+      <button id="lead-submit" type="submit" class="btn btn-primary btn-full">
+        Request Quote
+      </button>
+    </form>
+  </div>
+</section>
+
+<script src="/static/js/lead_form.js"></script>
+{% endblock %}

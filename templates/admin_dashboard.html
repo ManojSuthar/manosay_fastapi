@@ -1,0 +1,98 @@
+<!-- templates/admin_dashboard.html -->
+{% extends "base.html" %} {% block content %}
+<main class="admin-container">
+  <div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+
+    <div class="admin-actions">
+      <h2>Create New Blog Post</h2>
+
+      <!-- IMPORTANT: action changed to /admin/create-post and field names adjusted -->
+      <form id="blog-form" action="/admin/create-post" method="POST">
+        <div class="form-group">
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Blog Title"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <input
+            type="text"
+            id="slug"
+            name="slug"
+            placeholder="URL Slug (optional, e.g., my-blog-post)"
+          />
+        </div>
+
+        <div class="form-group">
+          <textarea
+            id="content"
+            name="content"
+            placeholder="Blog Content"
+            rows="10"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="image_file">Featured Image (upload):</label>
+          <input
+            type="file"
+            id="image_file"
+            name="image_file"
+            accept="image/*"
+          />
+          <!-- Hidden input to store resulting image URL sent to server via upload endpoint -->
+          <input type="hidden" id="image_url" name="image" />
+          <div
+            id="upload-status"
+            style="margin-top: 6px; font-size: 0.9em"
+          ></div>
+          <div id="image-preview" style="margin-top: 8px">
+            <!-- Preview will be inserted here -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="text"
+            id="tags"
+            name="tags"
+            placeholder="Tags (comma separated)"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Publish Blog Post</button>
+      </form>
+    </div>
+
+    <div class="admin-actions">
+      <h2>Manage Blog Posts</h2>
+      <div id="blog-posts-list">
+        {% if posts %}
+        <ul class="admin-post-list">
+          {% for p in posts %}
+          <li class="admin-post-item">
+            <strong>{{ p.title }}</strong> —
+            <small>{{ p.published_date }}</small>
+            <div>
+              <a href="/blog/{{ p.slug }}" target="_blank">View</a>
+              <!-- Add delete/edit buttons that call endpoints you will add -->
+            </div>
+            <p>{{ p.excerpt }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No posts published yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</main>
+<script src="/static/js/blog_form.js"></script>
+{% endblock %}

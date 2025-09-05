@@ -23,7 +23,9 @@
   <div class="container">
     <div class="post-content-wrapper">
       <div class="post-image-large">
+        {% if post.image %}
         <img src="{{ post.image }}" alt="{{ post.title }}" />
+        {% endif %}
       </div>
 
       <div class="post-content-text">{{ post.content | safe }}</div>
