@@ -874,16 +874,16 @@ footer {
 
 /* Blog Styles */
 .blog-header {
-    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--light) 100%);
     color: white;
     text-align: center;
     padding: 50px 0;
 }
 
 .blog-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     opacity: 0.9;
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
 }
 

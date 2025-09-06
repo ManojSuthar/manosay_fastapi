@@ -30,7 +30,7 @@ from db import (
     connect_to_mongo,
     close_mongo_connection,
     ensure_indexes,
-    ping_db,
+    ping_db, connection_info
 )
 
 # Optional route modules (if present)
@@ -48,7 +48,8 @@ logger = logging.getLogger(__name__)
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000", "https://manosay.com"],
+    allow_origins=["http://localhost:8000",
+                   "https://manosay-fastapi.onrender.com", "https://manosay.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -100,13 +101,15 @@ except ImportError:
 async def startup_event():
     # Initialize Motor client and database
     try:
-        await connect_to_mongo()
+        await connect_to_mongo(server_selection_timeout_ms=20000, max_retries=5, base_backoff=1.0)
+        logger.info("Mongo connection info: %s", connection_info())
     except Exception:
-        logger.exception("Failed to connect to MongoDB during startup")
-        # Optionally: raise to prevent app from starting if DB mandatory
-        # raise
+        logger.exception(
+            "Failed to connect to MongoDB during startup — aborting startup")
+        # Raise so the process fails (Render will show failing deploy logs)
+        raise
 
-    # Ensure indexes (optional, idempotent). Errors shouldn't stop startup.
+    # Ensure indexes (optional)
     try:
         await ensure_indexes()
     except Exception:
@@ -347,29 +350,6 @@ async def home(request: Request):
     }
 
     return templates.TemplateResponse("index.html", context)
-
-
-# # Blog list
-# @app.get("/blog", response_class=HTMLResponse)
-# async def blog_list(request: Request):
-#     context = {
-#         "request": request,
-#         "posts": BLOG_POSTS,
-#         "page_title": "Blog - Manosay",
-#         "active_page": "blog"
-#     }
-#     return templates.TemplateResponse("blog.html", context)
-
-
-# # Single blog post
-# @app.get("/blog/{slug}", response_class=HTMLResponse)
-# async def blog_post(request: Request, slug: str):
-#     post = next((p for p in BLOG_POSTS if p["slug"] == slug), None)
-#     if not post:
-#         return RedirectResponse("/blog")
-#     context = {"request": request, "post": post,
-#                "page_title": f"{post['title']} - Manosay", "active_page": "blog"}
-#     return templates.TemplateResponse("blog-post.html", context)
 
 
 # Blog list - load from DB

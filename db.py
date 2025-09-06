@@ -1,16 +1,4 @@
 # db.py
-"""
-Async MongoDB helper for FastAPI using Motor (AsyncIOMotorClient).
-
-Features:
-- Reads MONGO_URI and MONGO_DB from environment (.env)
-- Async connect with ping and retry/backoff
-- Singleton AsyncIOMotorClient per process
-- Exposes: connect_to_mongo(), close_mongo_connection(), get_client(), get_database()
-- Optional: ensure_indexes() to create idempotent indexes on startup
-- ping_db() helper for health checks
-"""
-
 from __future__ import annotations
 import os
 import asyncio
@@ -49,13 +37,7 @@ async def connect_to_mongo(
     max_retries: int = _DEFAULT_CONNECT_RETRIES,
     base_backoff: float = _DEFAULT_RETRY_BACKOFF_SECONDS,
 ) -> None:
-    """
-    Initialize Motor AsyncIOMotorClient and DB reference.
-    Call this in FastAPI startup event.
 
-    Retries with exponential backoff on transient failures.
-    Raises exception if unable to connect after retries.
-    """
     global _client, _database
 
     if _client is not None:
@@ -105,7 +87,6 @@ async def connect_to_mongo(
 
 
 def close_mongo_connection() -> None:
-    """Close the Motor client. Call this in FastAPI shutdown event."""
     global _client, _database
     if _client:
         try:
@@ -118,7 +99,6 @@ def close_mongo_connection() -> None:
 
 
 def get_client() -> AsyncIOMotorClient:
-    """Return the Motor client instance. Raises if not initialized."""
     if _client is None:
         raise RuntimeError(
             "MongoDB client is not initialized. Call connect_to_mongo() in startup.")
@@ -126,7 +106,6 @@ def get_client() -> AsyncIOMotorClient:
 
 
 def get_database():
-    """Return the Motor database instance. Raises if not initialized."""
     if _database is None:
         raise RuntimeError(
             "MongoDB database is not initialized. Call connect_to_mongo() in startup.")
@@ -134,10 +113,6 @@ def get_database():
 
 
 async def ensure_indexes() -> None:
-    """
-    Optional: create indexes you need on startup (idempotent).
-    Example: unique email index on users collection.
-    """
     db = get_database()
     try:
         # Ensure unique user email
@@ -153,7 +128,6 @@ async def ensure_indexes() -> None:
 
 
 async def ping_db() -> bool:
-    """Return True if DB responds to ping, False otherwise (used by health checks)."""
     try:
         client = get_client()
         await client.admin.command("ping")
@@ -164,7 +138,6 @@ async def ping_db() -> bool:
 
 
 def connection_info() -> Dict[str, Any]:
-    """Return non-secret connection info helpful for logs/health endpoints."""
     return {
         "uri": _safe_uri_display(MONGO_URI),
         "db": MONGO_DB,
@@ -173,10 +146,6 @@ def connection_info() -> Dict[str, Any]:
 
 
 def _safe_uri_display(uri: Optional[str]) -> str:
-    """
-    Return a redacted version of the URI for logs (hide credentials).
-    Example: mongodb+srv://<user>:<pass>@host/...  -> mongodb+srv://<redacted>@host/...
-    """
     if not uri:
         return "<missing>"
     try:
