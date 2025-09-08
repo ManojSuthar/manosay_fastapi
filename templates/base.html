@@ -5,10 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Primary Meta / Dynamic -->
     <title>
       {{ page_title or "Manosay - Mobile App Development & Digital Marketing" }}
     </title>
-
     <meta
       name="description"
       content="{{ page_description or 'Manosay provides professional mobile app development (Android, iOS, Flutter, iPad, Tablet, Cross-Platform) along with SEO and Digital Marketing services.' }}"
@@ -17,13 +17,19 @@
       name="keywords"
       content="Mobile App Development, Android Apps, iOS Apps, Flutter Apps, Cross-Platform Apps, iPad Development, Tablet Apps, SEO Services, Digital Marketing, App Promotion"
     />
-    <meta name="author" content="Manosay" />
+    <meta name="author" content="ManoSay" />
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:200, max-image-preview:large"
+    />
 
     <!-- Canonical -->
     <link rel="canonical" href="{{ request.url }}" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook (dynamic og image support) -->
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ManoSay" />
     <meta property="og:url" content="{{ request.url }}" />
     <meta
       property="og:title"
@@ -33,29 +39,83 @@
       property="og:description"
       content="{{ page_description or 'Expert in Android, iOS, Flutter, Tablet & iPad App Development with SEO & Digital Marketing solutions.' }}"
     />
-    <meta property="og:image" content="https://manosay.com/logo.png" />
+    <meta
+      property="og:image"
+      content="{{ page_og_image or 'https://manosay.com/static/images/og_image.png' }}"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="{{ request.url }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="{{ request.url }}" />
     <meta
-      property="twitter:title"
+      name="twitter:title"
       content="{{ page_title or 'Manosay - Mobile App Development & Digital Marketing' }}"
     />
     <meta
-      property="twitter:description"
+      name="twitter:description"
       content="{{ page_description or 'Expert in Android, iOS, Flutter, Tablet & iPad App Development with SEO & Digital Marketing solutions.' }}"
     />
-    <meta property="twitter:image" content="https://manosay.com/logo.png" />
+    <meta
+      name="twitter:image"
+      content="{{ page_og_image or 'https://manosay.com/static/images/og_image.png' }}"
+    />
+    <!-- replace @yourhandle with your twitter handle (optional) -->
+    <meta name="twitter:site" content="@yourhandle" />
+    <meta name="twitter:creator" content="@yourhandle" />
 
-    <!-- Favicon -->
+    <!-- Favicon / Theme -->
     <link rel="icon" href="/static/images/favicon.png" type="image/png" />
+    <meta name="theme-color" content="#0b74de" />
 
+    <!-- Web App Manifest (optional) -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ManoSay",
+        "url": "https://manosay.com/",
+        "logo": "https://manosay.com/static/images/logo.png",
+        "sameAs": [
+          "https://www.facebook.com/manojmottyar",
+          "https://x.com/ManojMottyar",
+          "https://www.linkedin.com/in/iammanojsuthar/",
+          "https://www.instagram.com/manojmottyar?igsh=MTI1MnMzaWQ1b29ydA=="
+        ],
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "telephone": "+91-6367219071",
+            "contactType": "customer service",
+            "areaServed": "IN",
+            "availableLanguage": ["English", "Hindi", "Punjabi"]
+          }
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Phase-7",
+          "addressLocality": "Mohali",
+          "postalCode": "160055",
+          "addressCountry": "IN"
+        }
+      }
+    </script>
+
+    <!-- Optional: preconnect to speed up external fonts/icons -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+
+    <!-- Stylesheets (kept same) -->
     <link rel="stylesheet" href="/static/css/style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+
+    <!-- NOTE: No body ids/classes changed below — only head updates -->
   </head>
 
   <body>
