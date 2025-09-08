@@ -24,36 +24,64 @@ window.addEventListener('scroll', () => {
 });
 
 // Smooth scrolling for navigation links
+// document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+//     anchor.addEventListener('click', function (e) {
+//         e.preventDefault();
+        
+//         const targetId = this.getAttribute('href').split('#')[1];
+        
+//         if (targetId === '#') return;
+        
+//         const targetElement = document.querySelector(targetId);
+        
+//         if (targetElement) {
+//             // Calculate the position to scroll to (considering fixed header)
+//             const headerOffset = 80;
+//             const elementPosition = targetElement.getBoundingClientRect().top;
+//             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            
+//             window.scrollTo({
+//                 top: offsetPosition,
+//                 behavior: 'smooth'
+//             });
+            
+//             // Close mobile menu if open
+//             if (navMenu.classList.contains('active')) {
+//                 navMenu.classList.remove('active');
+//                 mobileToggle.querySelector('i').classList.add('fa-bars');
+//                 mobileToggle.querySelector('i').classList.remove('fa-times');
+//             }
+//         }
+//     });
+// });
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        
-        if (targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement) {
-            // Calculate the position to scroll to (considering fixed header)
-            const headerOffset = 80;
-            const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-            
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-            
-            // Close mobile menu if open
-            if (navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                mobileToggle.querySelector('i').classList.add('fa-bars');
-                mobileToggle.querySelector('i').classList.remove('fa-times');
-            }
+
+        const targetId = this.getAttribute('href').split('#')[1]; // get id only
+        if (!targetId) return;
+
+        const targetElement = document.getElementById(targetId);
+        if (!targetElement) return;
+
+        const headerOffset = 80; // adjust according to your header height
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+
+        // Close mobile menu if open
+        if (navMenu.classList.contains('active')) {
+            navMenu.classList.remove('active');
+            mobileToggle.querySelector('i').classList.add('fa-bars');
+            mobileToggle.querySelector('i').classList.remove('fa-times');
         }
     });
 });
+
 
 // Contact form handling
 const contactForm = document.getElementById('contactForm');
